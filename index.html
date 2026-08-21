@@ -175,6 +175,7 @@
     padding: 20px clamp(14px, 3vw, 26px);
     text-align: center;
     min-width: 84px;
+    transition: border-color 0.4s, box-shadow 0.4s;
   }
 
   .count-unit .num{
@@ -202,6 +203,13 @@
     font-size: 0.9rem;
     margin-top: 24px;
   }
+
+  /* teleported state: countdown glows */
+  .countdown.teleported .count-unit{
+    border-color: var(--gold);
+    box-shadow: 0 0 22px rgba(232, 185, 97, 0.35);
+  }
+  .countdown.teleported .num{ color: var(--rose); }
 
   /* ---------- Quiz ---------- */
   .quiz-card{
@@ -307,6 +315,213 @@
     cursor: pointer;
   }
 
+  /* ---------- Teleportation ---------- */
+  #teleport-section .section-head p{
+    color: var(--muted);
+    max-width: 480px;
+    margin: 14px auto 0;
+    font-size: 0.95rem;
+  }
+
+  .teleport-agree{
+    max-width: 480px;
+    margin: 0 auto 40px;
+    text-align: center;
+  }
+
+  .teleport-checkbox{
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+
+  .teleport-checkbox input{
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .teleport-checkbox .box{
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--card);
+    position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .teleport-checkbox .box::after{
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--bg);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .teleport-checkbox input:checked + .box{
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+  .teleport-checkbox input:checked + .box::after{ opacity: 1; }
+
+  .teleport-checkbox input:focus-visible + .box{
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  .teleport-warning{
+    margin: 14px 0 0;
+    font-size: 0.85rem;
+    color: var(--rose);
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.3s ease;
+  }
+  .teleport-warning.show{ opacity: 1; max-height: 3em; }
+
+  .teleport-stage{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+  }
+
+  .teleport-orbit{
+    position: relative;
+    width: 190px;
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* faint mystical ring that slowly rotates behind the button */
+  .teleport-orbit::before{
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px dashed var(--line);
+    animation: orbit-spin 18s linear infinite;
+  }
+
+  @keyframes orbit-spin{
+    to{ transform: rotate(360deg); }
+  }
+
+  .teleport-orbit.stopped::before{ animation-play-state: paused; }
+
+  .teleport-ring{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    pointer-events: none;
+  }
+
+  .teleport-ring .ring-track{
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 3;
+  }
+
+  .teleport-ring .ring-fill{
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 452.4; /* 2 * PI * r(72) */
+    stroke-dashoffset: 452.4;
+  }
+
+  .teleport-btn.loading{
+    animation: glow-pulse 1s ease-in-out infinite;
+  }
+
+  .teleport-btn{
+    position: relative;
+    width: 148px;
+    height: 148px;
+    border-radius: 50%;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: radial-gradient(circle at 35% 30%, #F4D8A0, var(--gold) 70%);
+    color: var(--bg);
+    border: none;
+    cursor: pointer;
+    box-shadow:
+      0 0 0 rgba(232, 185, 97, 0.5),
+      0 18px 40px rgba(11, 16, 38, 0.55);
+    animation: float-btn 4.5s ease-in-out infinite, glow-pulse 3.2s ease-in-out infinite;
+    transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
+  }
+
+  @keyframes float-btn{
+    0%, 100%{ transform: translateY(0); }
+    50%{ transform: translateY(-14px); }
+  }
+
+  @keyframes glow-pulse{
+    0%, 100%{ box-shadow: 0 0 22px rgba(232,185,97,0.35), 0 18px 40px rgba(11,16,38,0.55); }
+    50%{ box-shadow: 0 0 46px rgba(232,185,97,0.65), 0 18px 40px rgba(11,16,38,0.55); }
+  }
+
+  .teleport-btn:hover{ transform: translateY(-18px) scale(1.03); }
+  .teleport-btn:active{ transform: translateY(-10px) scale(0.98); }
+
+  .teleport-btn.zapped{
+    animation: zap 0.6s ease;
+    background: radial-gradient(circle at 35% 30%, #F3B6AF, var(--rose) 70%);
+  }
+
+  @keyframes zap{
+    0%{ box-shadow: 0 0 0 rgba(232,145,138,0.7), 0 18px 40px rgba(11,16,38,0.55); }
+    30%{ box-shadow: 0 0 70px rgba(232,145,138,0.8), 0 18px 40px rgba(11,16,38,0.55); }
+    100%{ box-shadow: 0 0 22px rgba(232,145,138,0.35), 0 18px 40px rgba(11,16,38,0.55); }
+  }
+
+  .teleport-btn:disabled{ cursor: default; opacity: 0.9; animation: none; transform: none; }
+
+  .teleport-result{
+    text-align: center;
+    min-height: 1.6em;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--gold);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .teleport-result.show{ opacity: 1; transform: translateY(0); }
+
+  .teleport-result .door{
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    font-family: 'Space Mono', monospace;
+    font-style: normal;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
   /* ---------- Footer note ---------- */
   footer{
     text-align: center;
@@ -378,6 +593,49 @@
     </div>
   </section>
 
+  <section id="teleport-section">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">ახალი ფუნქციონალი</div>
+        <h2>ტელეპორტაცია</h2>
+        <p>სანამ შენ წასული იყავი ვმუშაობდი ერთ სერიოზულ პროექტზე. შენ იცი მე რომ ფიზიკა მიყვარს ძალიან და სწორედ მისი დახმარებით
+          შევქმენი პროტოტიპი, რომელიც აკეთებს ტელეპორტაციას. ეს ბეტა ვერსიაა შეიძლება ცუდად იმუშავოს, ან არ იმუშავოს საერთოდ,
+          მაგრამ ვცადოთ მაინც ჩვენი რა მიდის.</p>
+        <p>წესები ასეთია, ზემოთ საიტზე ხომ გვაქვს ქაუნთდაუნი, დრო რომ იკლებს და ჩვენი შეხვედრის დროს ითვლის.
+          მე შევქმენი მანქანა, რომელიც ამ ქაუნთდაუნს მიჰყვება და ასევე შევქმენი კოდი, რომელიც ქაუნთდაუნს მართავს. 
+          როცა ქაუნთდაუნი ნულამდე ჩამოვა, მანქანა გააქტიურდება და შენ შეგიძლია ტელეპორტაცია მოახდინო.
+          სანამ დააჭერ ღილაკს ხელს, ნახე ციფერბლატზე უბრალოდ რამდენი დღე დარჩა შეხვედრამდე და შემდეგ დაბრუნდი
+          ისევ ტელეპორტაციის ღილაკზე</p>
+        <p>და დააჭირე... დააჭირე როცა მზად იქნები, სრულ სიჩუმეში და სრულ ფოკუსში, არავითარი ხმაური და არავითარი ჩარევა, უბრალოდ დააჭირე.
+          დააჭირე და დაელოდე შედეგს. თუ ოპერაცია წარმატებით განხორციელდა, დრო განულდება და ღილაკის ქვემოთ დაიწერება პასუხი.
+          პასუხს მე ვერ ვაკონტროლებ, შესაძლოა მითითებები იყოს, რასაც აუცილებლად უნდა მიჰყვე, ბოლომდე...</p>
+      </div>
+
+      <div class="teleport-agree">
+        <label class="teleport-checkbox">
+          <input type="checkbox" id="teleport-agree-checkbox">
+          <span class="box"></span>
+          <span class="agree-text">წავიკითხე ზემოთ მოცემული ინსტრუქცია</span>
+        </label>
+        <p class="teleport-warning" id="teleport-warning">ჯერ წაიკითხე ინსტრუქცია და მონიშნე ველი, შემდეგ დააჭირე ღილაკს ისევ.</p>
+      </div>
+
+      <div class="teleport-stage">
+        <div class="teleport-orbit" id="teleport-orbit">
+          <svg class="teleport-ring" id="teleport-ring" viewBox="0 0 160 160">
+            <circle class="ring-track" cx="80" cy="80" r="72"></circle>
+            <circle class="ring-fill" id="ring-fill" cx="80" cy="80" r="72"></circle>
+          </svg>
+          <button class="teleport-btn" id="teleport-btn">Teleportation</button>
+        </div>
+        <div class="teleport-result" id="teleport-result">
+          ტელეპორტაცია წარმატებულია
+          <span class="door">RESULT: --- .--. . -. / - .... . / -.. --- --- .-. 🚪✨</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <div class="signoff">Same moon, different windows.</div>
     <p>Made with love, for Marita By Lasha</p>
@@ -394,6 +652,9 @@
     "Counting down to " + new Date(TARGET_DATE).toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' });
 
   function pad(n){ return String(n).padStart(2,'0'); }
+
+  let tickInterval = null;
+  let teleported = false;
 
   function tick(){
     const now = new Date();
@@ -415,7 +676,7 @@
     }
   }
   tick();
-  setInterval(tick, 1000);
+  tickInterval = setInterval(tick, 1000);
 
   /* ===================== EDIT ME: quiz questions =====================
    * Replace these with real questions/answers about your relationship.
@@ -534,6 +795,106 @@
   });
 
   renderQuestion();
+
+  /* ===================== Teleportation ===================== */
+  // Plays the song fragment (teleport-song.mp3) once when teleportation succeeds.
+  // The mp3 file must sit in the SAME folder as this index.html on GitHub.
+  function playTeleportSound(){
+    try{
+      const audio = new Audio('teleport-song.mp3');
+      audio.volume = 0.9;
+      audio.play().catch(() => {
+        // Autoplay can be blocked in rare cases — this is still triggered
+        // directly from a click, so it should play in practically all browsers.
+      });
+    } catch(e){
+      // Audio not available — visuals still work fine without it.
+    }
+  }
+
+  const teleportBtn = document.getElementById('teleport-btn');
+  const teleportResult = document.getElementById('teleport-result');
+  const countdownEl = document.getElementById('countdown');
+  const agreeCheckbox = document.getElementById('teleport-agree-checkbox');
+  const teleportWarning = document.getElementById('teleport-warning');
+  const teleportOrbit = document.getElementById('teleport-orbit');
+  const ringFill = document.getElementById('ring-fill');
+  const RING_CIRCUMFERENCE = 452.4;
+
+  let loading = false;
+
+  // hide the warning again as soon as the box gets checked
+  agreeCheckbox.addEventListener('change', () => {
+    if (agreeCheckbox.checked){
+      teleportWarning.classList.remove('show');
+    }
+  });
+
+  teleportBtn.addEventListener('click', () => {
+    if (teleported || loading) return;
+
+    if (!agreeCheckbox.checked){
+      teleportWarning.classList.add('show');
+      teleportBtn.textContent = 'წაიკითხე';
+      setTimeout(() => {
+        if (!teleported && !loading) teleportBtn.textContent = 'Teleportation';
+      }, 1800);
+      return;
+    }
+
+    startTeleportSequence();
+  });
+
+  function startTeleportSequence(){
+    loading = true;
+    teleportBtn.disabled = true;
+    teleportBtn.classList.add('loading');
+    teleportOrbit.classList.add('stopped');
+    teleportWarning.classList.remove('show');
+
+    // fill the ring smoothly over the full 10 seconds
+    ringFill.style.transition = 'stroke-dashoffset 10s linear';
+    // force reflow so the transition reliably kicks in
+    void ringFill.getBoundingClientRect();
+    ringFill.style.strokeDashoffset = '0';
+
+    let secondsLeft = 10;
+    teleportBtn.textContent = secondsLeft;
+
+    const countdownTimer = setInterval(() => {
+      secondsLeft -= 1;
+      if (secondsLeft > 0){
+        teleportBtn.textContent = secondsLeft;
+      } else {
+        clearInterval(countdownTimer);
+        finishTeleport();
+      }
+    }, 1000);
+  }
+
+  function finishTeleport(){
+    teleported = true;
+    loading = false;
+
+    // stop the live countdown and zero it out
+    if (tickInterval){ clearInterval(tickInterval); tickInterval = null; }
+    ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => {
+      document.getElementById(id).textContent = '00';
+    });
+    countdownEl.classList.add('teleported');
+    document.getElementById('countdown-note').textContent = 'შეხვედრამდე დარჩენილია შედეგის ნახვა და მასზე მიყოლა, რომელიც ღილაკის ქვემოთ დაიწერება.';
+
+    playTeleportSound();
+
+    teleportBtn.classList.remove('loading');
+    teleportBtn.classList.add('zapped');
+    teleportBtn.textContent = 'Teleported ✓';
+
+    teleportResult.classList.add('show');
+
+    // scroll the zeroed countdown into view so the moment lands
+    document.getElementById('countdown-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 </script>
 
 </body>
