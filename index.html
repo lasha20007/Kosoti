@@ -1,30 +1,540 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My GitHub Pages Site</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      max-width: 700px;
-      margin: 60px auto;
-      padding: 0 20px;
-      line-height: 1.6;
-      color: #1a1a1a;
-      background: #fafafa;
-    }
-    h1 {
-      color: #2b2b2b;
-    }
-    a {
-      color: #0366d6;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>მიყვარხარ, კოსოტი</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Sora:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* ====================================================
+     EDIT ME — search for these placeholders and swap in
+     your own details. Everything else you can leave alone.
+     1. ლაშა / მარიტა       — names shown in hero
+     2. თბილისი / ჰანოვერი       — the two points on the map
+     3. TARGET_DATE (in <script>)  — the date you next meet
+     4. QUIZ QUESTIONS (further down) — make them about you two
+     ==================================================== */
+
+  :root{
+    --bg: #0B1026;
+    --bg-soft: #131A38;
+    --card: #171F42;
+    --gold: #E8B961;
+    --rose: #E8918A;
+    --text: #F2EFE6;
+    --muted: #8B93B8;
+    --line: rgba(232, 185, 97, 0.25);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.5) 50%, transparent 50%),
+      radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.4) 50%, transparent 50%),
+      radial-gradient(1.5px 1.5px at 80% 20%, rgba(255,255,255,0.6) 50%, transparent 50%),
+      radial-gradient(1px 1px at 33% 85%, rgba(255,255,255,0.4) 50%, transparent 50%),
+      radial-gradient(1.5px 1.5px at 90% 60%, rgba(255,255,255,0.5) 50%, transparent 50%),
+      radial-gradient(1px 1px at 10% 60%, rgba(255,255,255,0.3) 50%, transparent 50%),
+      radial-gradient(1px 1px at 45% 15%, rgba(255,255,255,0.4) 50%, transparent 50%);
+    background-repeat: repeat;
+    background-size: 400px 400px;
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .wrap{ max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Hero: two stars, one line ---------- */
+  .hero{
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+  }
+
+  .eyebrow{
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+  }
+
+  .constellation{
+    width: min(560px, 90vw);
+    height: 140px;
+    margin-bottom: 20px;
+  }
+
+  .constellation .dash{
+    stroke: var(--gold);
+    stroke-width: 1.5;
+    stroke-dasharray: 6 6;
+    fill: none;
+    stroke-dashoffset: 400;
+    animation: draw 2.2s ease-out forwards 0.4s;
+  }
+
+  @keyframes draw{ to{ stroke-dashoffset: 0; } }
+
+  .constellation circle{
+    fill: var(--gold);
+    opacity: 0;
+    animation: appear 0.6s ease-out forwards;
+  }
+  .constellation circle.a{ animation-delay: 0.2s; }
+  .constellation circle.b{ animation-delay: 2.4s; fill: var(--rose); }
+
+  @keyframes appear{ to{ opacity: 1; } }
+
+  .constellation text{
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    fill: var(--muted);
+    letter-spacing: 0.05em;
+    opacity: 0;
+    animation: appear 0.6s ease-out forwards;
+  }
+  .constellation text.a{ animation-delay: 0.5s; }
+  .constellation text.b{ animation-delay: 2.7s; }
+
+  h1{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(2.4rem, 7vw, 4rem);
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+  }
+
+  h1 em{
+    font-style: italic;
+    font-weight: 500;
+    color: var(--gold);
+  }
+
+  .hero p{
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 460px;
+    margin: 0;
+  }
+
+  .scroll-cue{
+    position: absolute;
+    bottom: 36px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.7;
+  }
+
+  /* ---------- Countdown ---------- */
+  section{ padding: 90px 0; border-top: 1px solid var(--line); }
+
+  .section-head{ text-align: center; margin-bottom: 48px; }
+
+  .section-head .eyebrow{ margin-bottom: 10px; }
+
+  .section-head h2{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    margin: 0;
+  }
+
+  .countdown{
+    display: flex;
+    justify-content: center;
+    gap: clamp(14px, 4vw, 32px);
+    flex-wrap: wrap;
+  }
+
+  .count-unit{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 20px clamp(14px, 3vw, 26px);
+    text-align: center;
+    min-width: 84px;
+  }
+
+  .count-unit .num{
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    color: var(--gold);
+    display: block;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .count-unit .label{
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 6px;
+    display: block;
+  }
+
+  .countdown-note{
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-top: 24px;
+  }
+
+  /* ---------- Quiz ---------- */
+  .quiz-card{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+
+  .quiz-progress{
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+
+  .quiz-question{
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin: 0 0 22px;
+  }
+
+  .quiz-options{
+    display: grid;
+    gap: 10px;
+  }
+
+  .quiz-option{
+    text-align: left;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 0.95rem;
+    padding: 14px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .quiz-option:hover{ border-color: var(--gold); background: rgba(232,185,97,0.06); }
+
+  .quiz-option.correct{ border-color: var(--gold); background: rgba(232,185,97,0.14); color: var(--gold); }
+  .quiz-option.wrong{ border-color: var(--rose); background: rgba(232,145,138,0.1); color: var(--rose); }
+  .quiz-option:disabled{ cursor: default; }
+
+  .quiz-feedback{
+    margin-top: 18px;
+    font-size: 0.9rem;
+    color: var(--muted);
+    min-height: 1.4em;
+  }
+
+  .quiz-nav{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  .quiz-nav button{
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    padding: 10px 22px;
+    border-radius: 3px;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .quiz-nav button.show{ opacity: 1; pointer-events: auto; }
+
+  .quiz-result{
+    text-align: center;
+    display: none;
+  }
+  .quiz-result.show{ display: block; }
+  .quiz-result .score{
+    font-family: 'Fraunces', serif;
+    font-size: 2.2rem;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .quiz-result p{ color: var(--muted); }
+  .quiz-result button{
+    margin-top: 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--text);
+    padding: 10px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  /* ---------- Footer note ---------- */
+  footer{
+    text-align: center;
+    padding: 60px 24px 80px;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  footer .signoff{
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+</style>
 </head>
 <body>
-  <h1>Hello, Kosoti! 🫶</h1>
-  <p>This is a simple static site hosted for free using GitHub Pages.</p>
-  <p>Edit this file and push to your repository to update the site.</p>
+
+  <section class="hero">
+    <div class="eyebrow">ორი ქალაქი, ერთი გრავიტაცია</div>
+    <svg class="constellation" viewBox="0 0 560 140" xmlns="http://www.w3.org/2000/svg">
+      <path class="dash" d="M 60 100 Q 280 20 500 90" />
+      <circle class="a" cx="60" cy="100" r="5"></circle>
+      <text class="a" x="30" y="122">თბილისი</text>
+      <circle class="b" cx="500" cy="90" r="5"></circle>
+      <text class="b" x="440" y="115">ჰანოვერი</text>
+    </svg>
+    <h1>შორს ხარ მხოლოდ კილომეტრებით,<br><em>არასდროს </em> ჩემი გულისგან.</h1>
+    <p>ლაშა &amp; მარიტა — პატარა კოსოტური საიტი შენთვის 🫶</p>
+    <div class="scroll-cue">ჩასქროლე ↓</div>
+  </section>
+
+  <section id="countdown-section">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">დღეები ჩვენს მომდევნო შეხვედრამდე</div>
+        <h2>სანამ კიდევ ჩაგეხუტები</h2>
+      </div>
+      <div class="countdown" id="countdown">
+        <div class="count-unit"><span class="num" id="cd-days">00</span><span class="label">დღე</span></div>
+        <div class="count-unit"><span class="num" id="cd-hours">00</span><span class="label">საათი</span></div>
+        <div class="count-unit"><span class="num" id="cd-mins">00</span><span class="label">წუთი</span></div>
+        <div class="count-unit"><span class="num" id="cd-secs">00</span><span class="label">წამი</span></div>
+      </div>
+      <p class="countdown-note" id="countdown-note">Counting down to 2026-09-13</p>
+    </div>
+  </section>
+
+  <section id="quiz-section">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">ახლა კითხვარის დროა ცოტა გაერთე</div>
+        <h2>შორს ყოფნის ქვიზი</h2>
+      </div>
+
+      <div class="quiz-card" id="quiz-card">
+        <div class="quiz-progress" id="quiz-progress">შეკითხვა 1/6</div>
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+        <div class="quiz-nav"><button id="quiz-next">შემდეგი →</button></div>
+      </div>
+
+      <div class="quiz-result" id="quiz-result">
+        <div class="score" id="quiz-score"></div>
+        <p id="quiz-score-note"></p>
+        <button id="quiz-restart">შეავსე თავიდან</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="signoff">Same moon, different windows.</div>
+    <p>Made with love, for Marita By Lasha</p>
+  </footer>
+
+<script>
+  /* ===================== EDIT ME: target date ===================== *
+   * Set the date/time you next see each other. Format: YYYY-MM-DDTHH:mm:ss
+   * This uses the visitor's local time zone.                          */
+  const TARGET_DATE = "2026-09-13T00:00:00";
+  /* =================================================================== */
+
+  document.getElementById('countdown-note').textContent =
+    "Counting down to " + new Date(TARGET_DATE).toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' });
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+
+  function tick(){
+    const now = new Date();
+    const target = new Date(TARGET_DATE);
+    let diff = Math.max(0, target - now);
+
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff / (1000*60*60)) % 24);
+    const mins = Math.floor((diff / (1000*60)) % 60);
+    const secs = Math.floor((diff / 1000) % 60);
+
+    document.getElementById('cd-days').textContent = pad(days);
+    document.getElementById('cd-hours').textContent = pad(hours);
+    document.getElementById('cd-mins').textContent = pad(mins);
+    document.getElementById('cd-secs').textContent = pad(secs);
+
+    if (diff <= 0){
+      document.getElementById('countdown-note').textContent = "We're finally in the same place. 🎉";
+    }
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* ===================== EDIT ME: quiz questions =====================
+   * Replace these with real questions/answers about your relationship.
+   * "correct" is the index (0-based) of the right option.             */
+  const QUESTIONS = [
+    {
+      q: "აირჩიე ჩვენი სიმღერა?",
+      options: ["Addicted to you By Shakira", 
+      "Addicted to you By Avicii", 
+      "Meet Me Halfway By Black Eyed Peas", 
+      "რიმტირი ტარი ტარო By ქეთა თოფურია"],
+      correct: 1
+    },
+    {
+      q: "რა ფილმს ვუყურეთ მე და შენ ერთად?",
+      options: ["ევროტური", "კარიბის ზღვის მეკობრეები", "ტიტანიკი", "შავი სარკე (ეს ფილმი არაა სერიალია ამას არ დააჭირო)"],
+      correct: 0
+    },
+    {
+      q: "რამდენი საათია აცდენა თბილისსა და ჰანოვერს შორის?",
+      options: ["0", "1", "2", "3"],
+      correct: 2
+    },
+    {
+      q: "რა მენატრება შენში ყველაზე მეტად როცა შენ ჩემთან არ ხარ?",
+      options: ["შენი სიცილი", "შენი ჩახუტება", "შენთან ერთად სეირნობა", "რა შეკითხვაა ეხლა ეს, ყველაფერი! :)"],
+      correct: 3
+    },
+    {
+      q: "როცა შევხვდებით ერთმანეთს, პირველი რავქნათ?",
+      options: ["მაკი ვჭამოთ", "ლისზე გავისეირნოთ", "პრავაზე ქალაქის გაკვეთილები დავიწყოთ", 
+      "მხოლოდ ჩახუტება და კოცნა, დანარჩენი მერე"],
+      correct: 3
+    },
+        {
+      q: "ჩვენი საყვარელი სიტყვები?",
+      options: ["შეკლასნა", "კოსოტი", "მიყვარხარ", "კოსოტი, მიყვარხარ და იმედია შეკლასნა საიტმა"],
+      correct: 3
+    }
+  ];
+  /* =================================================================== */
+
+  let current = 0;
+  let score = 0;
+  let answered = false;
+
+  const questionEl = document.getElementById('quiz-question');
+  const optionsEl = document.getElementById('quiz-options');
+  const progressEl = document.getElementById('quiz-progress');
+  const feedbackEl = document.getElementById('quiz-feedback');
+  const nextBtn = document.getElementById('quiz-next');
+  const cardEl = document.getElementById('quiz-card');
+  const resultEl = document.getElementById('quiz-result');
+
+  function renderQuestion(){
+    answered = false;
+    feedbackEl.textContent = '';
+    nextBtn.classList.remove('show');
+    const item = QUESTIONS[current];
+    progressEl.textContent = `შეკითხვა ${current + 1}/${QUESTIONS.length}`;
+    questionEl.textContent = item.q;
+    optionsEl.innerHTML = '';
+    item.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-option';
+      btn.textContent = opt;
+      btn.addEventListener('click', () => selectAnswer(i, btn));
+      optionsEl.appendChild(btn);
+    });
+    nextBtn.textContent = current === QUESTIONS.length - 1 ? 'შედეგის ნახვა →' : 'შემდეგი →';
+  }
+
+  function selectAnswer(i, btn){
+    if (answered) return;
+    answered = true;
+    const item = QUESTIONS[current];
+    const allBtns = optionsEl.querySelectorAll('.quiz-option');
+    allBtns.forEach(b => b.disabled = true);
+
+    if (i === item.correct){
+      btn.classList.add('correct');
+      feedbackEl.textContent = "აბა რაა 🫶";
+      score++;
+    } else {
+      btn.classList.add('wrong');
+      allBtns[item.correct].classList.add('correct');
+      feedbackEl.textContent = "კაი რა — ეს რანაირად შეგეშალა -_-";
+    }
+    nextBtn.classList.add('show');
+  }
+
+  nextBtn.addEventListener('click', () => {
+    if (current < QUESTIONS.length - 1){
+      current++;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  });
+
+  function showResult(){
+    cardEl.style.display = 'none';
+    resultEl.classList.add('show');
+    document.getElementById('quiz-score').textContent = `${score} / ${QUESTIONS.length}`;
+    const note = score === QUESTIONS.length
+      ? "აჰაა აქაც გამაქსე — როდის იყო გამოცდებს ვერ აბარებდი."
+      : "სპეციალურად შეგეშალა ვიცი. მიყვარხარ პატარა კოსოტი.";
+    document.getElementById('quiz-score-note').textContent = note;
+  }
+
+  document.getElementById('quiz-restart').addEventListener('click', () => {
+    current = 0; score = 0;
+    cardEl.style.display = 'block';
+    resultEl.classList.remove('show');
+    renderQuestion();
+  });
+
+  renderQuestion();
+</script>
+
 </body>
 </html>
