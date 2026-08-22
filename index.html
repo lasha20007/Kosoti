@@ -8,15 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Sora:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  /* ====================================================
-     EDIT ME — search for these placeholders and swap in
-     your own details. Everything else you can leave alone.
-     1. ლაშა / მარიტა       — names shown in hero
-     2. თბილისი / ჰანოვერი       — the two points on the map
-     3. TARGET_DATE (in <script>)  — the date you next meet
-     4. QUIZ QUESTIONS (further down) — make them about you two
-     ==================================================== */
-
   :root{
     --bg: #0B1026;
     --bg-soft: #131A38;
@@ -56,7 +47,6 @@
 
   .wrap{ max-width: 720px; margin: 0 auto; padding: 0 24px; }
 
-  /* ---------- Hero: two stars, one line ---------- */
   .hero{
     min-height: 100svh;
     display: flex;
@@ -147,7 +137,6 @@
     opacity: 0.7;
   }
 
-  /* ---------- Countdown ---------- */
   section{ padding: 90px 0; border-top: 1px solid var(--line); }
 
   .section-head{ text-align: center; margin-bottom: 48px; }
@@ -204,14 +193,20 @@
     margin-top: 24px;
   }
 
-  /* teleported state: countdown glows */
+  /* matches the styling of the result message under the teleport button */
+  .countdown-note.result-style{
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--gold);
+  }
+
   .countdown.teleported .count-unit{
     border-color: var(--gold);
     box-shadow: 0 0 22px rgba(232, 185, 97, 0.35);
   }
   .countdown.teleported .num{ color: var(--rose); }
 
-  /* ---------- Quiz ---------- */
   .quiz-card{
     background: var(--card);
     border: 1px solid var(--line);
@@ -315,7 +310,6 @@
     cursor: pointer;
   }
 
-  /* ---------- Teleportation ---------- */
   #teleport-section .section-head p{
     color: var(--muted);
     max-width: 480px;
@@ -409,7 +403,6 @@
     justify-content: center;
   }
 
-  /* faint mystical ring that slowly rotates behind the button */
   .teleport-orbit::before{
     content: '';
     position: absolute;
@@ -445,7 +438,7 @@
     stroke: var(--gold);
     stroke-width: 3;
     stroke-linecap: round;
-    stroke-dasharray: 452.4; /* 2 * PI * r(72) */
+    stroke-dasharray: 452.4;
     stroke-dashoffset: 452.4;
   }
 
@@ -522,7 +515,6 @@
     color: var(--muted);
   }
 
-  /* ---------- Footer note ---------- */
   footer{
     text-align: center;
     padding: 60px 24px 80px;
@@ -642,11 +634,7 @@
   </footer>
 
 <script>
-  /* ===================== EDIT ME: target date ===================== *
-   * Set the date/time you next see each other. Format: YYYY-MM-DDTHH:mm:ss
-   * This uses the visitor's local time zone.                          */
   const TARGET_DATE = "2026-09-13T00:00:00";
-  /* =================================================================== */
 
   document.getElementById('countdown-note').textContent =
     "Counting down to " + new Date(TARGET_DATE).toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' });
@@ -678,9 +666,6 @@
   tick();
   tickInterval = setInterval(tick, 1000);
 
-  /* ===================== EDIT ME: quiz questions =====================
-   * Replace these with real questions/answers about your relationship.
-   * "correct" is the index (0-based) of the right option.             */
   const QUESTIONS = [
     {
       q: "აირჩიე ჩვენი სიმღერა?",
@@ -717,7 +702,6 @@
       correct: 3
     }
   ];
-  /* =================================================================== */
 
   let current = 0;
   let score = 0;
@@ -796,34 +780,25 @@
 
   renderQuestion();
 
-  /* ===================== Teleportation ===================== */
-  // Plays the song fragment (teleport-song.mp3) once when teleportation succeeds.
-  // The mp3 file must sit in the SAME folder as this index.html on GitHub.
   function playTeleportSound(){
     try{
       const audio = new Audio('teleport-song.mp3');
       audio.volume = 0.9;
-      audio.play().catch(() => {
-        // Autoplay can be blocked in rare cases — this is still triggered
-        // directly from a click, so it should play in practically all browsers.
-      });
-    } catch(e){
-      // Audio not available — visuals still work fine without it.
-    }
+      audio.play().catch(() => {});
+    } catch(e){}
   }
 
   const teleportBtn = document.getElementById('teleport-btn');
   const teleportResult = document.getElementById('teleport-result');
   const countdownEl = document.getElementById('countdown');
+  const countdownNoteEl = document.getElementById('countdown-note');
   const agreeCheckbox = document.getElementById('teleport-agree-checkbox');
   const teleportWarning = document.getElementById('teleport-warning');
   const teleportOrbit = document.getElementById('teleport-orbit');
   const ringFill = document.getElementById('ring-fill');
-  const RING_CIRCUMFERENCE = 452.4;
 
   let loading = false;
 
-  // hide the warning again as soon as the box gets checked
   agreeCheckbox.addEventListener('change', () => {
     if (agreeCheckbox.checked){
       teleportWarning.classList.remove('show');
@@ -852,9 +827,7 @@
     teleportOrbit.classList.add('stopped');
     teleportWarning.classList.remove('show');
 
-    // fill the ring smoothly over the full 10 seconds
     ringFill.style.transition = 'stroke-dashoffset 10s linear';
-    // force reflow so the transition reliably kicks in
     void ringFill.getBoundingClientRect();
     ringFill.style.strokeDashoffset = '0';
 
@@ -876,13 +849,13 @@
     teleported = true;
     loading = false;
 
-    // stop the live countdown and zero it out
     if (tickInterval){ clearInterval(tickInterval); tickInterval = null; }
     ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => {
       document.getElementById(id).textContent = '00';
     });
     countdownEl.classList.add('teleported');
-    document.getElementById('countdown-note').textContent = 'შეხვედრამდე დარჩენილია შედეგის ნახვა და მასზე მიყოლა, რომელიც ღილაკის ქვემოთ დაიწერება.';
+    countdownNoteEl.textContent = 'შეხვედრამდე დარჩენილია შედეგის ნახვა და მასზე მიყოლა, რომელიც ღილაკის ქვემოთ დაიწერება.';
+    countdownNoteEl.classList.add('result-style');
 
     playTeleportSound();
 
@@ -892,7 +865,6 @@
 
     teleportResult.classList.add('show');
 
-    // scroll the zeroed countdown into view so the moment lands
     document.getElementById('countdown-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 </script>
